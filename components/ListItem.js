@@ -7,18 +7,18 @@ const ListItem = (props) => {
   return (
     <TouchableOpacity style={CatListStyles.CatListItem}>
       <Image
-        style={{width: 100, height: 100}}
+        style={CatListStyles.CatListImage}
         source={{uri: item.thumbnails.w160}}
       />
       <View>
-        <Text>{item.title}</Text>
-        <Text>{item.description}</Text>
+        <Text style={CatListStyles.CatListTitle}>{item.title}</Text>
+        <Text style={CatListStyles.CatListText}>{item.description}</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
-ListItem.PropTypes = {
+ListItem.propTypes = {
   singleMedia: PropTypes.object,
 };
 
