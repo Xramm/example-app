@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-undef 
+// eslint-disable-next-line no-undef
 module.exports = {
   'parser': '@babel/eslint-parser',
   'env': {

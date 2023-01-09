@@ -1,12 +1,5 @@
 import {StatusBar} from 'expo-status-bar';
-import {
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  SafeAreaView,
-} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import SafeViewAndroid from './components/SafeViewAndroid';
 import List from './components/List';
 
