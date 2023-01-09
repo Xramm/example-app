@@ -20,6 +20,7 @@ const ListItem = (props) => {
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
+  onClickEvent: PropTypes.func,
 };
 
 export default ListItem;

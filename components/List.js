@@ -1,5 +1,6 @@
 import {FlatList} from 'react-native';
 import ListItem from './ListItem';
+import PropTypes from 'prop-types';
 
 const mediaArray = [
   {
@@ -34,13 +35,17 @@ const mediaArray = [
   },
 ];
 
-const List = () => {
+const List = (props) => {
   return (
     <FlatList
       data={mediaArray}
       renderItem={({item}) => <ListItem singleMedia={item} />}
     />
   );
+};
+
+List.propTypes = {
+  onItemClick: PropTypes.func,
 };
 
 export default List;

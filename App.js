@@ -5,6 +5,7 @@ import List from './components/List';
 
 const App = () => {
   console.log('Starting example-app.');
+
   return (
     <>
       <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
