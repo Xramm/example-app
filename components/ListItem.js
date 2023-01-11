@@ -1,6 +1,7 @@
 import CatListStyles from './CatListStyles';
 import {Text, View, TouchableOpacity, Image} from 'react-native';
 import PropTypes from 'prop-types';
+import {uploadsUrl} from '../utils/variables';
 
 const ListItem = (props) => {
   const item = props.singleMedia;
@@ -8,7 +9,7 @@ const ListItem = (props) => {
     <TouchableOpacity style={CatListStyles.CatListItem}>
       <Image
         style={CatListStyles.CatListImage}
-        source={{uri: item.thumbnails.w160}}
+        source={{uri: uploadsUrl + item.thumbnails?.w160}}
       />
       <View>
         <Text style={CatListStyles.CatListTitle}>{item.title}</Text>

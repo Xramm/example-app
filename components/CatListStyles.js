@@ -7,18 +7,18 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   CatListImage: {
-    width: '35%',
+    width: '50%',
     height: 250,
     margin: 10,
   },
   CatListTitle: {
-    width: '10%',
+    width: '50%',
     margin: 10,
     fontWeight: 'bold',
     fontSize: 20,
   },
   CatListText: {
-    width: '10%',
+    width: '50%',
     marginTop: 0,
     marginRight: 10,
     marginLeft: 10,
