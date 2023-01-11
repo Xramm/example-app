@@ -8,18 +8,19 @@ const List = () => {
   const [mediaArray, setMediaArray] = useState([]);
 
   const loadMedia = async () => {
-    const response = await fetch(url);
-    const json = await response.json();
-    setMediaArray(json);
+    //  try/catch on await
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+      setMediaArray(json);
+    } catch (error) {
+      console.error('LIST, LOAD_MEDIA', error);
+    }
   };
 
   //  Run loadMedia only on initial load of this component to stop infinite looping
   useEffect(() => {
-    try {
-      loadMedia();
-    } catch {
-      console.error('LIST, LOAD_MEDIA Failed to load media.');
-    }
+    loadMedia();
   }, []);
 
   console.log('LIST, LOAD_MEDIA', mediaArray);
