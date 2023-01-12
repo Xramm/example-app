@@ -1,15 +1,11 @@
 import {StatusBar} from 'expo-status-bar';
-import {SafeAreaView} from 'react-native';
-import SafeViewAndroid from './components/SafeViewAndroid';
-import List from './components/List';
+import Navigator from './navigators/Navigator';
 
 const App = () => {
   console.log('Starting example-app.');
   return (
     <>
-      <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
-        <List />
-      </SafeAreaView>
+      <Navigator />
       <StatusBar style="auto" />
     </>
   );
