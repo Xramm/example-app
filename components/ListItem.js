@@ -5,8 +5,14 @@ import {uploadsUrl} from '../utils/variables';
 
 const ListItem = (props) => {
   const item = props.singleMedia;
+  const navigation = props.navigation;
   return (
-    <TouchableOpacity style={CatListStyles.CatListItem}>
+    <TouchableOpacity
+      style={CatListStyles.CatListItem}
+      onPress={() => {
+        navigation.navigate('Single', item);
+      }}
+    >
       <Image
         style={CatListStyles.CatListImage}
         source={{uri: uploadsUrl + item.thumbnails?.w160}}
@@ -21,6 +27,7 @@ const ListItem = (props) => {
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
+  navigation: PropTypes.object,
 };
 
 export default ListItem;
