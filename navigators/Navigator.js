@@ -5,15 +5,29 @@ import Home from '../views/Home';
 import Profile from '../views/Profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Single from '../views/Single';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const TabScreen = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'Profile') {
+            iconName = 'person';
+          }
+
+          return <Ionicons name={iconName} />;
+        },
+      })}
+    >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profle" component={Profile} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };
@@ -40,3 +54,18 @@ const Navigator = () => {
 };
 
 export default Navigator;
+
+/*
+screenOptions={({route}) => {
+      return (tabBarIcon: ({focused, color, size}) => {
+        let iconName;
+        if (route.name === 'None') {
+          iconName = 'home';
+        } else if (route.name === 'Profile') {
+          iconName = 'person'
+        }
+
+        return <Ionicons name={iconName} />
+      }
+      );
+    }} */
