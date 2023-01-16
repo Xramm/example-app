@@ -32,4 +32,18 @@ const useMedia = () => {
   return {mediaArray};
 };
 
-export {useMedia};
+const useAuthentication = () => {
+  const postLogin = async () => {
+    // TODO: Post login to api
+    // https://media.mw.metropolia.fi/wbma/docs/#api-Authentication-PostAuth
+  };
+};
+
+// https://media.mw.metropolia.fi/wbma/docs/#api-User
+const useUser = () => {
+  const checkUser = async () => {
+    // Call https://media.mw.metropolia.fi/wbma/docs/#api-User-CheckUserName
+  };
+};
+
+export {useMedia, useAuthentication};
