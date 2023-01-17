@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useContext} from 'react';
 import {StyleSheet, SafeAreaView, Text, Button} from 'react-native';
+import {secondaryColor} from '../components/ColorPalette';
 import {MainContext} from '../contexts/MainContext';
 
 const Profile = () => {
@@ -9,6 +10,7 @@ const Profile = () => {
     <SafeAreaView style={styles.container}>
       <Text>Profile</Text>
       <Button
+        color={secondaryColor}
         title="Logout"
         onPress={async () => {
           console.log('Logging out!');

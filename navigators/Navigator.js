@@ -8,6 +8,11 @@ import Login from '../views/Login';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
+import {MainStyles} from '../components/Styles';
+import {
+  navigationFocusedTextColor,
+  navigationUnfocusedTextColor,
+} from '../components/ColorPalette';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -18,18 +23,38 @@ const TabScreen = () => {
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
+          const currentColor = focused
+            ? navigationFocusedTextColor
+            : navigationUnfocusedTextColor;
           if (route.name === 'Home') {
             iconName = 'home';
           } else if (route.name === 'Profile') {
             iconName = 'person';
           }
 
-          return <Ionicons name={iconName} />;
+          return <Ionicons name={iconName} color={currentColor} size={size} />;
         },
+        tabBarStyle: MainStyles.TabBarStyle,
+        tabBarActiveTintColor: navigationFocusedTextColor,
+        tabBarInactiveTintColor: navigationUnfocusedTextColor,
       })}
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          headerStyle: MainStyles.NavigationHeader,
+          headerTitleStyle: MainStyles.NavigationHeaderTitle,
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerStyle: MainStyles.NavigationHeader,
+          headerTitleStyle: MainStyles.NavigationHeaderTitle,
+        }}
+      />
     </Tab.Navigator>
   );
 };
@@ -48,7 +73,14 @@ const StackScreen = () => {
           <Stack.Screen name="Single" component={Single} />
         </>
       ) : (
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerStyle: MainStyles.NavigationHeader,
+            headerTitleStyle: MainStyles.NavigationHeaderTitle,
+          }}
+        />
       )}
     </Stack.Navigator>
   );

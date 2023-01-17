@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, Button} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {secondaryColor} from '../components/ColorPalette';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn} = useContext(MainContext);
@@ -35,7 +36,7 @@ const Login = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text>Login</Text>
-      <Button title="Sign in!" onPress={logIn} />
+      <Button color={secondaryColor} title="Sign in!" onPress={logIn} />
     </View>
   );
 };

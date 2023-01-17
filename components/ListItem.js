@@ -1,5 +1,5 @@
-import CatListStyles from './CatListStyles';
-import {Text, View, TouchableOpacity, Image} from 'react-native';
+import {ListStyles} from './Styles';
+import {Text, TouchableOpacity, Image} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 
@@ -8,19 +8,17 @@ const ListItem = (props) => {
   const navigation = props.navigation;
   return (
     <TouchableOpacity
-      style={CatListStyles.CatListItem}
+      style={ListStyles.ListItem}
       onPress={() => {
         navigation.navigate('Single', item);
       }}
     >
+      <Text style={ListStyles.ListTitle}>{item.title}</Text>
+      <Text style={ListStyles.ListDescription}>{item.description}</Text>
       <Image
-        style={CatListStyles.CatListImage}
+        style={ListStyles.ListImage}
         source={{uri: uploadsUrl + item.thumbnails?.w160}}
       />
-      <View>
-        <Text style={CatListStyles.CatListTitle}>{item.title}</Text>
-        <Text style={CatListStyles.CatListText}>{item.description}</Text>
-      </View>
     </TouchableOpacity>
   );
 };
