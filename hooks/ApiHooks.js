@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {mediaUrl} from '../utils/variables';
+import {loginUrl, mediaUrl, usersUrl} from '../utils/variables';
 
 const doFetch = async (url, options) => {
   const response = await fetch(url, options);
@@ -49,27 +49,40 @@ const useMedia = () => {
 
 const useAuthentication = () => {
   const postLogin = async (userCredentials) => {
-    // user credentials format: {username: 'someUsername', password: 'somePassword'}
     const options = {
-      // TODO: add method, headers and body for sending json data with POST
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userCredentials),
     };
     try {
-      // TODO: use fetch to send request to login endpoint and return the result as json, handle errors with try/catch and response.ok
+      return await doFetch(loginUrl, options);
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error('ApiHooks, postLogin: ' + error.message);
     }
   };
 
   return {postLogin};
 };
 
-// https://media.mw.metropolia.fi/wbma/docs/#api-User
 const useUser = () => {
-  const checkUser = async () => {
-    // Call https://media.mw.metropolia.fi/wbma/docs/#api-User-CheckUserName
+  const getUserByToken = async (token) => {
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+    };
+    try {
+      return await doFetch(usersUrl + 'user', options);
+    } catch (error) {
+      throw new Error('ApiHooks, getUserByToken: ' + error.message);
+    }
   };
 
-  return {checkUser};
+  return {getUserByToken};
 };
 
-export {useMedia, useAuthentication};
+export {useMedia, useAuthentication, useUser};

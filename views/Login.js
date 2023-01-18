@@ -3,29 +3,38 @@ import {StyleSheet, View, Text, Button} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {secondaryColor} from '../components/ColorPalette';
+import {backgroundColor, secondaryColor} from '../components/ColorPalette';
+import {useAuthentication, useUser} from '../hooks/ApiHooks';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn} = useContext(MainContext);
+  const {postLogin} = useAuthentication();
+
   const logIn = async () => {
     console.log('Logging in!');
-    setIsLoggedIn(true);
+    const data = {username: 'juliusli', password: 'pass123'};
     try {
-      await AsyncStorage.setItem('userToken', 'abc123');
+      const loginResult = await postLogin(data);
+      console.log('LogIn, logIn', loginResult);
+      await AsyncStorage.setItem('userToken', loginResult.token);
+      setIsLoggedIn(true);
     } catch (error) {
-      console.warn('Error in storing the user token: ', error);
+      console.error('LogIn, logIn: ', error);
     }
   };
 
   const checkToken = async () => {
+    const {getUserByToken} = useUser();
+
     try {
       const userToken = await AsyncStorage.getItem('userToken');
-
-      if (userToken === 'abc123') {
-        setIsLoggedIn(true);
-      }
+      console.log('Login, checkToken, token:', userToken);
+      const userData = await getUserByToken(userToken);
+      console.log(userData);
+      setIsLoggedIn(true);
     } catch (error) {
-      console.log('No valid token available', error);
+      console.warn('No valid token available', error);
+      setIsLoggedIn(false);
     }
   };
 
@@ -44,7 +53,7 @@ const Login = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: backgroundColor,
     alignItems: 'center',
     justifyContent: 'center',
   },
