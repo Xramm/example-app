@@ -70,7 +70,15 @@ const StackScreen = () => {
             component={TabScreen}
             options={{headerShown: false}}
           />
-          <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen
+            name="Single"
+            component={Single}
+            options={{
+              headerTitle: 'Post',
+              headerStyle: MainStyles.NavigationHeader,
+              headerTitleStyle: MainStyles.NavigationHeaderTitle,
+            }}
+          />
         </>
       ) : (
         <Stack.Screen

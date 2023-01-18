@@ -41,8 +41,8 @@ const ListStyles = StyleSheet.create({
     paddingBottom: 3,
     fontWeight: 'bold',
     fontSize: 20,
-    borderTopLeftRadius: 17,
-    borderTopRightRadius: 17,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   ListDescription: {
     color: darkTextColor,
@@ -76,6 +76,50 @@ const MainStyles = StyleSheet.create({
   },
 });
 
+const SingleStyles = StyleSheet.create({
+  background: {
+    backgroundColor: backgroundColor,
+    flex: 1,
+    padding: 5,
+  },
+  container: {
+    backgroundColor: mainColor,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    borderRadius: 20,
+  },
+  title: {
+    color: darkTextColor,
+    backgroundColor: secondaryColor,
+    fontWeight: 'bold',
+    fontSize: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 10,
+  },
+  dateText: {
+    color: darkTextColor,
+    backgroundColor: secondaryColor,
+    paddingLeft: 10,
+    paddingBottom: 10,
+  },
+  image: {
+    width: '100%',
+    height: 300,
+    objectFit: 'cover',
+    padding: 10,
+  },
+  descriptionText: {
+    color: darkTextColor,
+    backgroundColor: secondaryColor,
+    flex: 1,
+    padding: 10,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+});
+
 const SafeAreas = StyleSheet.create({
   AndroidSafeArea: {
     flex: 1,
@@ -84,4 +128,4 @@ const SafeAreas = StyleSheet.create({
   },
 });
 
-export {ListStyles, MainStyles, SafeAreas};
+export {ListStyles, MainStyles, SafeAreas, SingleStyles};
