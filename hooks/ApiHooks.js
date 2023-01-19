@@ -82,7 +82,22 @@ const useUser = () => {
     }
   };
 
-  return {getUserByToken};
+  const postUser = async (userData) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    };
+    try {
+      return await doFetch(usersUrl, options);
+    } catch (error) {
+      throw new Error('ApiHooks, postUser: ' + error.message);
+    }
+  };
+
+  return {getUserByToken, postUser};
 };
 
 export {useMedia, useAuthentication, useUser};

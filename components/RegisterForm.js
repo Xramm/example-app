@@ -1,40 +1,37 @@
 import React, {useState} from 'react';
-import {useContext} from 'react';
 import {Button, Text, TextInput, View} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {MainContext} from '../contexts/MainContext';
 import {secondaryColor} from './ColorPalette';
-import {useAuthentication} from '../hooks/ApiHooks';
+import {useUser} from '../hooks/ApiHooks';
 import {Controller, useForm} from 'react-hook-form';
 
-const LoginForm = (props) => {
-  const {setIsLoggedIn, setUser} = useContext(MainContext);
-  const {postLogin} = useAuthentication();
+const RegisterForm = (props) => {
+  const {postUser} = useUser();
   const {
     control,
     handleSubmit,
     formState: {errors},
-  } = useForm({defaultValues: {username: '', password: ''}});
+  } = useForm({
+    defaultValues: {username: '', password: '', email: '', full_name: ''},
+  });
   const [displayPassword, changeDisplayPassword] = useState(false);
 
-  const logIn = async (loginData) => {
-    console.log('Logging in!');
-    console.log(loginData);
+  const register = async (userData) => {
+    console.log('Registering: ', userData);
     try {
-      const loginResult = await postLogin(loginData);
-      console.log('LogIn, logIn', loginResult);
-      await AsyncStorage.setItem('userToken', loginResult.token);
-      setUser(loginResult.user);
-      setIsLoggedIn(true);
+      const registerResult = await postUser(userData);
+      console.log('Register, register', registerResult);
+
+      if (registerResult.user_id === null) return; // Did not successfully register so stop here
     } catch (error) {
-      console.error('LogIn, logIn: ', error);
-      // TODO: notify user about failed login
+      console.error('Register, register: ', error);
+      // TODO: notify user about failed registering
+      return;
     }
   };
 
   return (
     <View>
-      <Text>Login Form</Text>
+      <Text>Register Form</Text>
       <Controller
         control={control}
         rules={{required: true, minLength: 3}}
@@ -48,12 +45,32 @@ const LoginForm = (props) => {
         )}
         name="username"
       />
+
       {errors.username?.type === 'required' && (
         <Text>Username is required.</Text>
       )}
       {errors.username?.type === 'minLength' && (
         <Text>Username is too short.</Text>
       )}
+
+      <Controller
+        control={control}
+        rules={{required: true}}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            placeholder="Full Name"
+            onblur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="full_name"
+      />
+
+      {errors.full_name?.type === 'required' && (
+        <Text>Full name is required.</Text>
+      )}
+
       <Controller
         control={control}
         rules={{required: true, minLength: 5}}
@@ -68,7 +85,9 @@ const LoginForm = (props) => {
         )}
         name="password"
       />
+
       {errors.password && <Text>Password is too short.</Text>}
+
       <Button
         color={secondaryColor}
         title="Show Password"
@@ -76,13 +95,29 @@ const LoginForm = (props) => {
           changeDisplayPassword(!displayPassword);
         }}
       />
+      <Controller
+        control={control}
+        rules={{required: true}}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            placeholder="Email"
+            onblur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="email"
+      />
+
+      {errors.email?.type === 'required' && <Text>Email is required.</Text>}
+
       <Button
         color={secondaryColor}
-        title="Sign in"
-        onPress={handleSubmit(logIn)}
+        title="Register"
+        onPress={handleSubmit(register)}
       />
     </View>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

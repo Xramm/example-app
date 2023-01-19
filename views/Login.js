@@ -1,14 +1,21 @@
 import React, {useContext, useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {backgroundColor} from '../components/ColorPalette';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
+import RegisterForm from '../components/RegisterForm';
 
 const Login = ({navigation}) => {
-  const {setIsLoggedIn} = useContext(MainContext);
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
 
   const checkToken = async () => {
     const {getUserByToken} = useUser();
@@ -20,6 +27,7 @@ const Login = ({navigation}) => {
       console.log('Login, checkToken, token:', userToken);
       const userData = await getUserByToken(userToken);
       console.log(userData);
+      setUser(userData);
       setIsLoggedIn(true);
     } catch (error) {
       console.warn('No valid token available', error);
@@ -32,9 +40,18 @@ const Login = ({navigation}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <LoginForm />
-    </View>
+    <TouchableOpacity
+      onPress={() => Keyboard.dismiss()}
+      style={styles.container}
+      activeOpacity={1}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <LoginForm />
+        <RegisterForm />
+      </KeyboardAvoidingView>
+    </TouchableOpacity>
   );
 };
 

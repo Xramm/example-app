@@ -5,15 +5,20 @@ import {secondaryColor} from '../components/ColorPalette';
 import {MainContext} from '../contexts/MainContext';
 
 const Profile = () => {
-  const {setIsLoggedIn} = useContext(MainContext);
+  const {setIsLoggedIn, user, setUser} = useContext(MainContext);
   return (
     <SafeAreaView style={styles.container}>
       <Text>Profile</Text>
+      <Text>{user.username}</Text>
+      <Text>{user.full_name}</Text>
+      <Text>{user.email}</Text>
+      <Text>{user.time_created}</Text>
       <Button
         color={secondaryColor}
         title="Logout"
         onPress={async () => {
           console.log('Logging out!');
+          setUser({}); // Clear current user
           setIsLoggedIn(false);
           try {
             await AsyncStorage.clear();
