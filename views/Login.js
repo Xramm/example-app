@@ -1,33 +1,22 @@
 import React, {useContext, useEffect} from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {backgroundColor, secondaryColor} from '../components/ColorPalette';
-import {useAuthentication, useUser} from '../hooks/ApiHooks';
+import {backgroundColor} from '../components/ColorPalette';
+import {useUser} from '../hooks/ApiHooks';
+import LoginForm from '../components/LoginForm';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn} = useContext(MainContext);
-  const {postLogin} = useAuthentication();
-
-  const logIn = async () => {
-    console.log('Logging in!');
-    const data = {username: 'juliusli', password: 'pass123'};
-    try {
-      const loginResult = await postLogin(data);
-      console.log('LogIn, logIn', loginResult);
-      await AsyncStorage.setItem('userToken', loginResult.token);
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.error('LogIn, logIn: ', error);
-    }
-  };
 
   const checkToken = async () => {
     const {getUserByToken} = useUser();
-
     try {
       const userToken = await AsyncStorage.getItem('userToken');
+
+      if (userToken === null) return; // Return if no existing token
+
       console.log('Login, checkToken, token:', userToken);
       const userData = await getUserByToken(userToken);
       console.log(userData);
@@ -44,8 +33,7 @@ const Login = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Login</Text>
-      <Button color={secondaryColor} title="Sign in!" onPress={logIn} />
+      <LoginForm />
     </View>
   );
 };
