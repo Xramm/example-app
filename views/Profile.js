@@ -1,6 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CardImage} from '@rneui/base/dist/Card/Card.Image';
+import {CardTitle} from '@rneui/base/dist/Card/Card.Title';
+import {ListItemTitle} from '@rneui/base/dist/ListItem/ListItem.Title';
+import {Card, Icon, ListItem} from '@rneui/themed';
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, SafeAreaView, Text, Button, Image} from 'react-native';
+import {Text, Button} from 'react-native';
 import {secondaryColor} from '../components/ColorPalette';
 import {MainContext} from '../contexts/MainContext';
 import {useTag} from '../hooks/ApiHooks';
@@ -25,16 +29,20 @@ const Profile = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>Profile</Text>
-      <Image
-        style={{height: 300, width: 300}}
-        source={{uri: uploadsUrl + avatar}}
-      />
-      <Text>{user.username}</Text>
-      <Text>{user.full_name}</Text>
-      <Text>{user.email}</Text>
-      <Text>{user.time_created}</Text>
+    <Card>
+      <CardTitle>{user.username}</CardTitle>
+      <CardImage source={{uri: uploadsUrl + avatar}} />
+      <ListItem>
+        <Icon name="badge"></Icon>
+        <ListItemTitle>{user.full_name}</ListItemTitle>
+      </ListItem>
+      <ListItem>
+        <Icon name="mail"></Icon>
+        <ListItemTitle>{user.email}</ListItemTitle>
+      </ListItem>
+      <ListItem>
+        <ListItemTitle>{user.time_created}</ListItemTitle>
+      </ListItem>
       <Button
         color={secondaryColor}
         title="Logout"
@@ -49,18 +57,8 @@ const Profile = () => {
           }
         }}
       />
-    </SafeAreaView>
+    </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 40,
-  },
-});
 
 export default Profile;
