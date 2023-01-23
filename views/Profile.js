@@ -4,8 +4,9 @@ import {CardTitle} from '@rneui/base/dist/Card/Card.Title';
 import {ListItemTitle} from '@rneui/base/dist/ListItem/ListItem.Title';
 import {Card, Icon, ListItem} from '@rneui/themed';
 import React, {useContext, useEffect, useState} from 'react';
-import {Text, Button} from 'react-native';
+import {Button} from 'react-native';
 import {secondaryColor} from '../components/ColorPalette';
+import {NativeElementsStyles} from '../components/Styles';
 import {MainContext} from '../contexts/MainContext';
 import {useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
@@ -13,7 +14,7 @@ import {uploadsUrl} from '../utils/variables';
 const Profile = () => {
   const {getFilesByTag} = useTag();
   const {setIsLoggedIn, user, setUser} = useContext(MainContext);
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
 
   const loadAvatar = async () => {
     try {
@@ -31,7 +32,10 @@ const Profile = () => {
   return (
     <Card>
       <CardTitle>{user.username}</CardTitle>
-      <CardImage source={{uri: uploadsUrl + avatar}} />
+      <CardImage
+        style={NativeElementsStyles.profilePageProfilePicture}
+        source={{uri: uploadsUrl + avatar}}
+      />
       <ListItem>
         <Icon name="badge"></Icon>
         <ListItemTitle>{user.full_name}</ListItemTitle>

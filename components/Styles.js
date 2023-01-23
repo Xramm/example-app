@@ -65,8 +65,7 @@ const MainStyles = StyleSheet.create({
   },
   TabBarStyle: {
     backgroundColor: secondaryColor,
-    borderTopColor: backgroundColor,
-    borderTopWidth: 1,
+    borderTopWidth: 0,
   },
   Background: {
     backgroundColor: backgroundColor,
@@ -128,4 +127,11 @@ const SafeAreas = StyleSheet.create({
   },
 });
 
-export {ListStyles, MainStyles, SafeAreas, SingleStyles};
+const NativeElementsStyles = StyleSheet.create({
+  profilePageProfilePicture: {
+    width: 300,
+    height: 300,
+  },
+});
+
+export {ListStyles, MainStyles, SafeAreas, SingleStyles, NativeElementsStyles};
