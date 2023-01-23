@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {loginUrl, mediaUrl, usersUrl} from '../utils/variables';
+import {loginUrl, mediaUrl, tagsUrl, usersUrl} from '../utils/variables';
 
 const doFetch = async (url, options) => {
   const response = await fetch(url, options);
@@ -100,4 +100,16 @@ const useUser = () => {
   return {getUserByToken, postUser};
 };
 
-export {useMedia, useAuthentication, useUser};
+const useTag = () => {
+  const getFilesByTag = async (tag) => {
+    try {
+      return await doFetch(tagsUrl + tag);
+    } catch (error) {
+      throw new Error('ApiHooks, getFilesByTag: ' + error.message);
+    }
+  };
+
+  return {getFilesByTag};
+};
+
+export {useMedia, useAuthentication, useUser, useTag};
