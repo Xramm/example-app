@@ -97,7 +97,22 @@ const useUser = () => {
     }
   };
 
-  return {getUserByToken, postUser};
+  const checkUsername = async (username) => {
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const result = await doFetch(usersUrl + 'username/' + username, options);
+      return result.available;
+    } catch (error) {
+      throw new Error('ApiHooks, checkUser: ' + error.message);
+    }
+  };
+
+  return {getUserByToken, postUser, checkUsername};
 };
 
 const useTag = () => {

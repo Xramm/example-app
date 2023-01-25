@@ -41,6 +41,7 @@ const LoginForm = (props) => {
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
             placeholder="Username"
+            autoCapitalize="none"
             onblur={onBlur}
             onChangeText={onChange}
             value={value}

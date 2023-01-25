@@ -1,24 +1,28 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   TouchableOpacity,
+  Button,
+  Text,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {backgroundColor} from '../components/ColorPalette';
+import {secondaryColor} from '../components/ColorPalette';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {getUserByToken} = useUser();
+
+  const [toggleForm, setToggleForm] = useState(true);
 
   const checkToken = async () => {
-    const {getUserByToken} = useUser();
     try {
       const userToken = await AsyncStorage.getItem('userToken');
 
@@ -39,6 +43,10 @@ const Login = ({navigation}) => {
     checkToken();
   }, []);
 
+  const onFormTogglePress = () => {
+    setToggleForm(!toggleForm);
+  };
+
   return (
     <TouchableOpacity
       onPress={() => Keyboard.dismiss()}
@@ -48,8 +56,15 @@ const Login = ({navigation}) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <LoginForm />
-        <RegisterForm />
+        {toggleForm ? <LoginForm /> : <RegisterForm />}
+        <Text>
+          {toggleForm ? 'Need an account?' : 'Already have an account?'}
+        </Text>
+        <Button
+          color={secondaryColor}
+          title={toggleForm ? 'Register Form' : 'Login Form'}
+          onPress={onFormTogglePress}
+        />
       </KeyboardAvoidingView>
     </TouchableOpacity>
   );
@@ -57,10 +72,7 @@ const Login = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: backgroundColor,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
   },
 });
 

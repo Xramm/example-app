@@ -1,17 +1,19 @@
 import React, {useState} from 'react';
-import {Button, Text, TextInput, View} from 'react-native';
+import {View} from 'react-native';
 import {secondaryColor} from './ColorPalette';
 import {useUser} from '../hooks/ApiHooks';
 import {Controller, useForm} from 'react-hook-form';
+import {Input, Button, Text} from '@rneui/base';
 
 const RegisterForm = (props) => {
-  const {postUser} = useUser();
+  const {postUser, checkUsername} = useUser();
   const {
     control,
     handleSubmit,
     formState: {errors},
   } = useForm({
     defaultValues: {username: '', password: '', email: '', full_name: ''},
+    mode: 'onBlur',
   });
   const [displayPassword, changeDisplayPassword] = useState(false);
 
@@ -29,36 +31,45 @@ const RegisterForm = (props) => {
     }
   };
 
+  const checkUser = async (username) => {
+    try {
+      const userAvailable = await checkUsername(username);
+      console.log('RegisterForm, checkUser: ' + userAvailable);
+      return userAvailable || 'Username is already taken';
+    } catch (error) {
+      console.error('RegisterForm, checkUser: ', error.message);
+    }
+  };
+
   return (
     <View>
-      <Text>Register Form</Text>
+      <Text>Registeration Form</Text>
       <Controller
         control={control}
-        rules={{required: true, minLength: 3}}
+        rules={{
+          required: {value: true, message: 'Required'},
+          minLength: {value: 3, message: 'Minimum length is 3'},
+          validate: {checkUser},
+        }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Username"
+            autoCapitalize="none"
             onblur={onBlur}
             onChangeText={onChange}
             value={value}
+            errorMessage={errors.username && errors.username.message}
           />
         )}
         name="username"
       />
 
-      {errors.username?.type === 'required' && (
-        <Text>Username is required.</Text>
-      )}
-      {errors.username?.type === 'minLength' && (
-        <Text>Username is too short.</Text>
-      )}
-
       <Controller
         control={control}
-        rules={{required: true}}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Full Name"
+            autoCapitalize="words"
             onblur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -73,14 +84,22 @@ const RegisterForm = (props) => {
 
       <Controller
         control={control}
-        rules={{required: true, minLength: 5}}
+        rules={{
+          required: {value: true, message: 'Required'},
+          minLength: {value: 5, message: 'Must have at least 5 characters'},
+          pattern: {
+            value: /(?=.*\p{Lu})(?=.*[0-9]).{5,}/u,
+            message: 'Must include one upper case letter and one number',
+          },
+        }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Password"
             secureTextEntry={!displayPassword}
             onblur={onBlur}
             onChangeText={onChange}
             value={value}
+            errorMessage={errors.password && errors.password.message}
           />
         )}
         name="password"
@@ -97,19 +116,19 @@ const RegisterForm = (props) => {
       />
       <Controller
         control={control}
-        rules={{required: true}}
+        rules={{required: {value: true, message: 'Required'}}}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Email"
+            autoCapitalize="none"
             onblur={onBlur}
             onChangeText={onChange}
             value={value}
+            errorMessage={errors.email && errors.email.message}
           />
         )}
         name="email"
       />
-
-      {errors.email?.type === 'required' && <Text>Email is required.</Text>}
 
       <Button
         color={secondaryColor}
