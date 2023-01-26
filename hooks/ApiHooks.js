@@ -112,7 +112,31 @@ const useUser = () => {
     }
   };
 
-  return {getUserByToken, postUser, checkUsername};
+  const changeUser = async (data) => {
+    if (data.token === null) {
+      console.error('Apihooks, changeUser: Did not pass a token!');
+      return;
+    }
+
+    const token = data.token;
+    delete data.token;
+
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(data),
+    };
+    try {
+      return await doFetch(usersUrl, options);
+    } catch (error) {
+      throw new Error('ApiHooks, changeUser: ' + error.message);
+    }
+  };
+
+  return {getUserByToken, postUser, checkUsername, changeUser};
 };
 
 const useTag = () => {
