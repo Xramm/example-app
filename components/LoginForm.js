@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import {useContext} from 'react';
-import {Button, Text, TextInput, View} from 'react-native';
+import {View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
 import {secondaryColor} from './ColorPalette';
 import {useAuthentication} from '../hooks/ApiHooks';
 import {Controller, useForm} from 'react-hook-form';
+import {Input, Button, Text} from '@rneui/base';
+import {CardDivider} from '@rneui/base/dist/Card/Card.Divider';
 
 const LoginForm = (props) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -37,46 +39,48 @@ const LoginForm = (props) => {
       <Text>Login Form</Text>
       <Controller
         control={control}
-        rules={{required: true, minLength: 3}}
+        rules={{
+          required: {value: true, message: 'Required'},
+        }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Username"
             autoCapitalize="none"
             onblur={onBlur}
             onChangeText={onChange}
             value={value}
+            errorMessage={errors.username && errors.username.message}
           />
         )}
         name="username"
       />
-      {errors.username?.type === 'required' && (
-        <Text>Username is required.</Text>
-      )}
-      {errors.username?.type === 'minLength' && (
-        <Text>Username is too short.</Text>
-      )}
+
       <Controller
         control={control}
-        rules={{required: true, minLength: 5}}
+        rules={{
+          required: {value: true, message: 'Required'},
+        }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Password"
             secureTextEntry={!displayPassword}
             onblur={onBlur}
             onChangeText={onChange}
             value={value}
+            errorMessage={errors.password && errors.password.message}
           />
         )}
         name="password"
       />
-      {errors.password && <Text>Password is too short.</Text>}
+
       <Button
         color={secondaryColor}
-        title="Show Password"
+        title={displayPassword ? 'Hide Password' : 'Show Password'}
         onPress={() => {
           changeDisplayPassword(!displayPassword);
         }}
       />
+      <CardDivider />
       <Button
         color={secondaryColor}
         title="Sign in"

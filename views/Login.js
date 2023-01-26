@@ -5,8 +5,6 @@ import {
   Platform,
   StyleSheet,
   TouchableOpacity,
-  Button,
-  Text,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
@@ -15,6 +13,9 @@ import {secondaryColor} from '../components/ColorPalette';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
+import {Button, Text} from '@rneui/base';
+import {Card} from '@rneui/themed';
+import {CardDivider} from '@rneui/base/dist/Card/Card.Divider';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -56,15 +57,18 @@ const Login = ({navigation}) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        {toggleForm ? <LoginForm /> : <RegisterForm />}
-        <Text>
-          {toggleForm ? 'Need an account?' : 'Already have an account?'}
-        </Text>
-        <Button
-          color={secondaryColor}
-          title={toggleForm ? 'Register Form' : 'Login Form'}
-          onPress={onFormTogglePress}
-        />
+        <Card>
+          {toggleForm ? <LoginForm /> : <RegisterForm />}
+          <CardDivider />
+          <Text>
+            {toggleForm ? 'Need an account?' : 'Already have an account?'}
+          </Text>
+          <Button
+            color={secondaryColor}
+            title={toggleForm ? 'Register Form' : 'Login Form'}
+            onPress={onFormTogglePress}
+          />
+        </Card>
       </KeyboardAvoidingView>
     </TouchableOpacity>
   );

@@ -11,13 +11,21 @@ const RegisterForm = (props) => {
     control,
     handleSubmit,
     formState: {errors},
+    getValues,
   } = useForm({
-    defaultValues: {username: '', password: '', email: '', full_name: ''},
+    defaultValues: {
+      username: '',
+      password: '',
+      confirmPassword: '',
+      email: '',
+      full_name: '',
+    },
     mode: 'onBlur',
   });
   const [displayPassword, changeDisplayPassword] = useState(false);
 
   const register = async (userData) => {
+    delete userData.confirmPassword;
     console.log('Registering: ', userData);
     try {
       const registerResult = await postUser(userData);
@@ -66,6 +74,10 @@ const RegisterForm = (props) => {
 
       <Controller
         control={control}
+        rules={{
+          required: {value: true, message: 'Required'},
+          minLength: {value: 2, message: 'Must be at least 2 characters'},
+        }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             placeholder="Full Name"
@@ -73,14 +85,11 @@ const RegisterForm = (props) => {
             onblur={onBlur}
             onChangeText={onChange}
             value={value}
+            errorMessage={errors.full_name && errors.full_name.message}
           />
         )}
         name="full_name"
       />
-
-      {errors.full_name?.type === 'required' && (
-        <Text>Full name is required.</Text>
-      )}
 
       <Controller
         control={control}
@@ -105,18 +114,47 @@ const RegisterForm = (props) => {
         name="password"
       />
 
-      {errors.password && <Text>Password is too short.</Text>}
+      <Controller
+        control={control}
+        rules={{
+          validate: (value) => {
+            if (value === getValues('password')) {
+              return true;
+            }
+            return 'Password needs to match';
+          },
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <Input
+            placeholder="Confirm Password"
+            secureTextEntry={!displayPassword}
+            onblur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            errorMessage={
+              errors.confirmPassword && errors.confirmPassword.message
+            }
+          />
+        )}
+        name="confirmPassword"
+      />
 
       <Button
         color={secondaryColor}
-        title="Show Password"
+        title={displayPassword ? 'Hide Password' : 'Show Password'}
         onPress={() => {
           changeDisplayPassword(!displayPassword);
         }}
       />
       <Controller
         control={control}
-        rules={{required: {value: true, message: 'Required'}}}
+        rules={{
+          required: {value: true, message: 'Required'},
+          pattern: {
+            value: /^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+            message: 'Invalid Email form',
+          },
+        }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             placeholder="Email"
