@@ -13,6 +13,8 @@ import {
   navigationFocusedTextColor,
   navigationUnfocusedTextColor,
 } from '../components/ColorPalette';
+import Upload from '../views/Upload';
+import {Icon} from '@rneui/themed';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -21,19 +23,6 @@ const TabScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          let iconName;
-          const currentColor = focused
-            ? navigationFocusedTextColor
-            : navigationUnfocusedTextColor;
-          if (route.name === 'Home') {
-            iconName = 'home';
-          } else if (route.name === 'Profile') {
-            iconName = 'person';
-          }
-
-          return <Ionicons name={iconName} color={currentColor} size={size} />;
-        },
         tabBarStyle: MainStyles.TabBarStyle,
         tabBarActiveTintColor: navigationFocusedTextColor,
         tabBarInactiveTintColor: navigationUnfocusedTextColor,
@@ -45,6 +34,16 @@ const TabScreen = () => {
         options={{
           headerStyle: MainStyles.NavigationHeader,
           headerTitleStyle: MainStyles.NavigationHeaderTitle,
+          tabBarIcon: ({color}) => <Icon name="home" color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="Upload"
+        component={Upload}
+        options={{
+          headerStyle: MainStyles.NavigationHeader,
+          headerTitleStyle: MainStyles.NavigationHeaderTitle,
+          tabBarIcon: ({color}) => <Icon name="cloud-upload" color={color} />,
         }}
       />
       <Tab.Screen
@@ -53,6 +52,7 @@ const TabScreen = () => {
         options={{
           headerStyle: MainStyles.NavigationHeader,
           headerTitleStyle: MainStyles.NavigationHeaderTitle,
+          tabBarIcon: ({color}) => <Icon name="person" color={color} />,
         }}
       />
     </Tab.Navigator>
