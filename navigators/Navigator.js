@@ -5,7 +5,6 @@ import Profile from '../views/Profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Single from '../views/Single';
 import Login from '../views/Login';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import {MainStyles} from '../components/Styles';

@@ -1,4 +1,5 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {MainContext} from '../contexts/MainContext';
 import {loginUrl, mediaUrl, tagsUrl, usersUrl} from '../utils/variables';
 
 const doFetch = async (url, options) => {
@@ -18,6 +19,7 @@ const doFetch = async (url, options) => {
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const {update} = useContext(MainContext);
 
   const loadMedia = async () => {
     //  try/catch on await
@@ -39,12 +41,27 @@ const useMedia = () => {
     }
   };
 
-  //  Run loadMedia only on initial load of this component to stop infinite looping
+  const postMedia = async (fileData, token) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'x-access-token': token,
+      },
+      body: fileData,
+    };
+    try {
+      return await doFetch(mediaUrl, options);
+    } catch (error) {
+      throw new Error('ApiHooks, postMedia: ' + error.message);
+    }
+  };
+
   useEffect(() => {
     loadMedia();
-  }, []);
+  }, [update]); // Load all media after upload
 
-  return {mediaArray};
+  return {mediaArray, postMedia};
 };
 
 const useAuthentication = () => {
