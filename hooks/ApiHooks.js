@@ -1,6 +1,12 @@
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
-import {loginUrl, mediaUrl, tagsUrl, usersUrl} from '../utils/variables';
+import {
+  appTag,
+  loginUrl,
+  mediaUrl,
+  tagsUrl,
+  usersUrl,
+} from '../utils/variables';
 
 const doFetch = async (url, options) => {
   const response = await fetch(url, options);
@@ -20,16 +26,18 @@ const doFetch = async (url, options) => {
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update} = useContext(MainContext);
+  const {getFilesByTag, postTag} = useTag();
 
   const loadMedia = async () => {
     //  try/catch on await
     try {
-      const response = await fetch(mediaUrl);
-      const json = await response.json();
+      // const response = await fetch(mediaUrl);
+      // const json = await response.json();
+      const json = await getFilesByTag(appTag);
 
       //  Get the extra data including the thumbnails of every file got from the server.
       const media = await Promise.all(
-        json.map(async (file) => {
+        json.reverse().map(async (file) => {
           const fileResponse = await fetch(mediaUrl + file.file_id);
           return await fileResponse.json();
         })
@@ -57,11 +65,35 @@ const useMedia = () => {
     }
   };
 
+  const postMediaWithAppTag = async (fileData, token) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'x-access-token': token,
+      },
+      body: fileData,
+    };
+    try {
+      const result = await doFetch(mediaUrl, options);
+
+      const tagData = {file_id: result.file_id, tag: appTag};
+
+      // TODO: Post Tag with the gotten file_id
+      const tagResult = await postTag(tagData, token);
+      console.log('Apihooks, postMediaWithAppTag: ' + tagResult);
+
+      return result;
+    } catch (error) {
+      throw new Error('ApiHooks, postMediaWithAppTag: ' + error.message);
+    }
+  };
+
   useEffect(() => {
     loadMedia();
   }, [update]); // Load all media after upload
 
-  return {mediaArray, postMedia};
+  return {mediaArray, postMedia, postMediaWithAppTag};
 };
 
 const useAuthentication = () => {
@@ -165,7 +197,28 @@ const useTag = () => {
     }
   };
 
-  return {getFilesByTag};
+  const postTag = async (data, token) => {
+    if (token === null) {
+      console.error('Apihooks, postTag: Did not pass a token!');
+      return;
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(data),
+    };
+    try {
+      return await doFetch(tagsUrl, options);
+    } catch (error) {
+      throw new Error('ApiHooks, postTag: ' + error.message);
+    }
+  };
+
+  return {getFilesByTag, postTag};
 };
 
 export {useMedia, useAuthentication, useUser, useTag};

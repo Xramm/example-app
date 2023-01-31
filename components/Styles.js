@@ -132,6 +132,11 @@ const NativeElementsStyles = StyleSheet.create({
     width: 300,
     height: 300,
   },
+  cardButtonRow: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
 });
 
 export {ListStyles, MainStyles, SafeAreas, SingleStyles, NativeElementsStyles};
