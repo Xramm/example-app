@@ -25,6 +25,7 @@ const ListItem = (props) => {
           source={{uri: uploadsUrl + item.thumbnails?.w160}}
         />
         <CardDivider />
+        <CardDivider />
         <Text>{item.description}</Text>
       </Card>
     </TouchableOpacity>
