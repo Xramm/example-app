@@ -13,7 +13,7 @@ import {
   Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import missingImage from '../img/missing.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
@@ -33,9 +33,6 @@ const Upload = ({navigation}) => {
 
   const [mediaFile, setMediaFile] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
-  const titleInput = useRef();
-  const descriptionInput = useRef();
 
   const pickFile = async () => {
     try {
@@ -132,7 +129,6 @@ const Upload = ({navigation}) => {
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
-                ref={titleInput}
                 placeholder="Title"
                 onblur={onBlur}
                 onChangeText={onChange}
@@ -147,7 +143,6 @@ const Upload = ({navigation}) => {
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
-                ref={descriptionInput}
                 placeholder="Description"
                 onblur={onBlur}
                 onChangeText={onChange}
