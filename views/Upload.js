@@ -23,8 +23,10 @@ const Upload = ({navigation}) => {
   const {
     control,
     handleSubmit,
+    trigger,
+    reset,
     formState: {errors},
-  } = useForm({defaultValues: {title: '', description: ''}});
+  } = useForm({defaultValues: {title: '', description: ''}, mode: 'onChange'});
   const {postMediaWithAppTag} = useMedia();
 
   const {update, setUpdate} = useContext(MainContext);
@@ -36,24 +38,28 @@ const Upload = ({navigation}) => {
   const descriptionInput = useRef();
 
   const pickFile = async () => {
-    // No permissions request is necessary for launching the image library
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.5,
-    });
+    try {
+      // No permissions request is necessary for launching the image library
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5,
+      });
 
-    console.log(result);
+      console.log(result);
 
-    if (!result.canceled) {
-      setMediaFile(result.assets[0]);
+      if (!result.canceled) {
+        setMediaFile(result.assets[0]);
+        trigger();
+      }
+    } catch (error) {
+      console.log('Upload, pickFile: ', error);
     }
   };
 
   const clearUpload = () => {
-    titleInput.current.clear();
-    descriptionInput.current.clear();
+    reset();
     setMediaFile({});
   };
 
@@ -168,7 +174,7 @@ const Upload = ({navigation}) => {
         </Card>
         <Card>
           <Button
-            disabled={!mediaFile.uri}
+            disabled={!mediaFile.uri || errors.title}
             color={secondaryColor}
             title="Upload"
             onPress={handleSubmit(uploadFile)}

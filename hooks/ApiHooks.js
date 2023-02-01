@@ -23,7 +23,7 @@ const doFetch = async (url, options) => {
   return json;
 };
 
-const useMedia = () => {
+const useMedia = (showAllMedia = false) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update} = useContext(MainContext);
   const {getFilesByTag, postTag} = useTag();
@@ -33,11 +33,19 @@ const useMedia = () => {
     try {
       // const response = await fetch(mediaUrl);
       // const json = await response.json();
-      const json = await getFilesByTag(appTag);
 
+      let json;
+
+      if (showAllMedia) {
+        const response = await fetch(mediaUrl);
+        json = await response.json();
+      } else {
+        json = await getFilesByTag(appTag);
+        json = json.reverse();
+      }
       //  Get the extra data including the thumbnails of every file got from the server.
       const media = await Promise.all(
-        json.reverse().map(async (file) => {
+        json.map(async (file) => {
           const fileResponse = await fetch(mediaUrl + file.file_id);
           return await fileResponse.json();
         })

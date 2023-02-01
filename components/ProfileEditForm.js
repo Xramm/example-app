@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {secondaryColor} from './ColorPalette';
 import {useUser} from '../hooks/ApiHooks';
 import {Controller, useForm} from 'react-hook-form';
-import {Input, Button, Text} from '@rneui/base';
+import {Input, Button, Text} from '@rneui/themed';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

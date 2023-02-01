@@ -1,24 +1,26 @@
 import React from 'react';
-import {View, Text, Image} from 'react-native';
+import {Image} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {SingleStyles} from '../components/Styles';
+import {Card, Text} from '@rneui/themed';
+import {CardTitle} from '@rneui/base/dist/Card/Card.Title';
+import {CardDivider} from '@rneui/base/dist/Card/Card.Divider';
 
 const Single = ({route}) => {
   console.log(route.params);
   const {title, description, filename, time_added: t} = route.params;
+
   return (
-    <View style={SingleStyles.background}>
-      <View style={SingleStyles.container}>
-        <Text style={SingleStyles.title}>{title}</Text>
-        <Text style={SingleStyles.dateText}>{t}</Text>
-        <Image
-          style={SingleStyles.image}
-          source={{uri: uploadsUrl + filename}}
-        />
-        <Text style={SingleStyles.descriptionText}>{description}</Text>
-      </View>
-    </View>
+    <Card>
+      <CardTitle>{title}</CardTitle>
+      <CardDivider />
+      <CardTitle>{t}</CardTitle>
+      <CardDivider />
+      <Image style={SingleStyles.image} source={{uri: uploadsUrl + filename}} />
+      <CardDivider />
+      <Text>{description}</Text>
+    </Card>
   );
 };
 

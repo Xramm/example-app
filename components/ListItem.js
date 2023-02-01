@@ -1,24 +1,32 @@
-import {ListStyles} from './Styles';
-import {Text, TouchableOpacity, Image} from 'react-native';
+import {NativeElementsStyles} from './Styles';
+import {TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
+import {Card, Text} from '@rneui/themed';
+import {CardDivider} from '@rneui/base/dist/Card/Card.Divider';
+import {CardImage} from '@rneui/base/dist/Card/Card.Image';
+import {CardTitle} from '@rneui/base/dist/Card/Card.Title';
 
 const ListItem = (props) => {
   const item = props.singleMedia;
   const navigation = props.navigation;
+
   return (
     <TouchableOpacity
-      style={ListStyles.ListItem}
       onPress={() => {
         navigation.navigate('Single', item);
       }}
     >
-      <Text style={ListStyles.ListTitle}>{item.title}</Text>
-      <Text style={ListStyles.ListDescription}>{item.description}</Text>
-      <Image
-        style={ListStyles.ListImage}
-        source={{uri: uploadsUrl + item.thumbnails?.w160}}
-      />
+      <Card>
+        <CardTitle>{item.title}</CardTitle>
+        <CardDivider />
+        <CardImage
+          style={NativeElementsStyles.listItemImage}
+          source={{uri: uploadsUrl + item.thumbnails?.w160}}
+        />
+        <CardDivider />
+        <Text>{item.description}</Text>
+      </Card>
     </TouchableOpacity>
   );
 };

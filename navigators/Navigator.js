@@ -1,6 +1,7 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import Home from '../views/Home';
+import AllMedia from '../views/AllMedia';
 import Profile from '../views/Profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Single from '../views/Single';
@@ -34,6 +35,15 @@ const TabScreen = () => {
           headerStyle: MainStyles.NavigationHeader,
           headerTitleStyle: MainStyles.NavigationHeaderTitle,
           tabBarIcon: ({color}) => <Icon name="home" color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="All Media"
+        component={AllMedia}
+        options={{
+          headerStyle: MainStyles.NavigationHeader,
+          headerTitleStyle: MainStyles.NavigationHeaderTitle,
+          tabBarIcon: ({color}) => <Icon name="photo" color={color} />,
         }}
       />
       <Tab.Screen
