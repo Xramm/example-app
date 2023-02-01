@@ -31,9 +31,6 @@ const useMedia = (showAllMedia = false) => {
   const loadMedia = async () => {
     //  try/catch on await
     try {
-      // const response = await fetch(mediaUrl);
-      // const json = await response.json();
-
       let json;
 
       if (showAllMedia) {

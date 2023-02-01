@@ -18,6 +18,7 @@ import missingImage from '../img/missing.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
+import {CardTitle} from '@rneui/base/dist/Card/Card.Title';
 
 const Upload = ({navigation}) => {
   const {
@@ -47,6 +48,7 @@ const Upload = ({navigation}) => {
       console.log(result);
 
       if (!result.canceled) {
+        console.log('Upload, pickFile: File Picked: ' + result.assets[0]);
         setMediaFile(result.assets[0]);
         trigger();
       }
@@ -153,9 +155,14 @@ const Upload = ({navigation}) => {
             name="description"
           />
 
-          <Card.Image
-            source={mediaFile.uri ? {uri: mediaFile.uri} : missingImage}
-          />
+          {mediaFile.type === 'video' ? (
+            <CardTitle>Video</CardTitle>
+          ) : (
+            <Card.Image
+              source={mediaFile.uri ? {uri: mediaFile.uri} : missingImage}
+              onPress={pickFile}
+            />
+          )}
 
           <CardDivider />
 
