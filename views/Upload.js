@@ -13,11 +13,12 @@ import {
   Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import missingImage from '../img/missing.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Upload = ({navigation}) => {
   const {
@@ -59,6 +60,12 @@ const Upload = ({navigation}) => {
     reset();
     setMediaFile({});
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      return clearUpload();
+    }, [])
+  );
 
   const uploadFile = async (data) => {
     setIsLoading(true);
