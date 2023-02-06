@@ -2,6 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import {
   appTag,
+  favouritesUrl,
   loginUrl,
   mediaUrl,
   tagsUrl,
@@ -241,4 +242,53 @@ const useTag = () => {
   return {getFilesByTag, postTag};
 };
 
-export {useMedia, useAuthentication, useUser, useTag};
+const useFavourite = () => {
+  const postFavourite = async (fileId, token) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({file_id: fileId}),
+    };
+    try {
+      return await doFetch(favouritesUrl, options);
+    } catch (error) {
+      throw new Error('ApiHooks, postFavourite: ' + error.message);
+    }
+  };
+
+  const getFavouritesByFileId = async (fileId) => {
+    try {
+      return await doFetch(favouritesUrl + 'file/' + fileId);
+    } catch (error) {
+      throw new Error('ApiHooks, getFavouritesByFileId: ' + error.message);
+    }
+  };
+
+  const getFavouritesByUser = async (token) => {};
+
+  const deleteFavourite = async (fileId, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    try {
+      return await doFetch(favouritesUrl + 'file/' + fileId, options);
+    } catch (error) {
+      throw new Error('ApiHooks, deleteFavourite: ' + error.message);
+    }
+  };
+
+  return {
+    postFavourite,
+    getFavouritesByFileId,
+    getFavouritesByUser,
+    deleteFavourite,
+  };
+};
+
+export {useMedia, useAuthentication, useUser, useTag, useFavourite};
