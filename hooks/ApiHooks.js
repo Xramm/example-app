@@ -190,7 +190,22 @@ const useUser = () => {
     }
   };
 
-  return {getUserByToken, postUser, checkUsername, changeUser};
+  const getUserById = async (id, token) => {
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+    };
+    try {
+      return await doFetch(usersUrl + id, options);
+    } catch (error) {
+      throw new Error('ApiHooks, getUserById: ' + error.message);
+    }
+  };
+
+  return {getUserByToken, postUser, checkUsername, changeUser, getUserById};
 };
 
 const useTag = () => {

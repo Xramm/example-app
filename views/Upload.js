@@ -13,12 +13,12 @@ import {
   Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useRef} from 'react';
 import missingImage from '../img/missing.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import {CardTitle} from '@rneui/base/dist/Card/Card.Title';
+import {Video} from 'expo-av';
 
 const Upload = ({navigation}) => {
   const {
@@ -34,6 +34,8 @@ const Upload = ({navigation}) => {
 
   const [mediaFile, setMediaFile] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const video = useRef(null);
 
   const pickFile = async () => {
     try {
@@ -156,7 +158,16 @@ const Upload = ({navigation}) => {
           />
 
           {mediaFile.type === 'video' ? (
-            <CardTitle>Video</CardTitle>
+            <Video
+              ref={video}
+              source={{uri: mediaFile.uri}}
+              style={{width: '100%', height: 200}}
+              useNativeControls
+              resizeMode="contain"
+              onError={(error) => {
+                console.log('Single, Single: ' + error);
+              }}
+            />
           ) : (
             <Card.Image
               source={mediaFile.uri ? {uri: mediaFile.uri} : missingImage}
@@ -168,7 +179,7 @@ const Upload = ({navigation}) => {
 
           <Button
             color={secondaryColor}
-            title="Select Image"
+            title="Select File"
             onPress={pickFile}
           />
           <CardDivider />
