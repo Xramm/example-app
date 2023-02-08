@@ -106,11 +106,41 @@ const useMedia = (showAllMedia = false, myFilesOnly = false) => {
     }
   };
 
+  const deleteMedia = async (fileId, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    try {
+      return await doFetch(mediaUrl + fileId, options);
+    } catch (error) {
+      throw new Error('ApiHooks, deleteMedia: ' + error.message);
+    }
+  };
+
+  const putMedia = async (fileId, data, token) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(data),
+    };
+    try {
+      return await doFetch(mediaUrl + fileId, options);
+    } catch (error) {
+      throw new Error('ApiHooks, putMedia: ' + error.message);
+    }
+  };
+
   useEffect(() => {
     loadMedia();
   }, [update]); // Load all media after upload
 
-  return {mediaArray, postMedia, postMediaWithAppTag};
+  return {mediaArray, postMedia, postMediaWithAppTag, deleteMedia, putMedia};
 };
 
 const useAuthentication = () => {
