@@ -72,6 +72,7 @@ const Profile = ({navigation}) => {
         />
         <CardDivider />
         <Button
+          color={secondaryColor}
           title="My Files"
           onPress={() => {
             navigation.navigate('MyFiles');
