@@ -15,6 +15,7 @@ import {
 } from '../components/ColorPalette';
 import Upload from '../views/Upload';
 import {Icon} from '@rneui/themed';
+import MyFiles from '../views/MyFiles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -84,6 +85,15 @@ const StackScreen = () => {
             component={Single}
             options={{
               headerTitle: 'Post',
+              headerStyle: MainStyles.NavigationHeader,
+              headerTitleStyle: MainStyles.NavigationHeaderTitle,
+            }}
+          />
+          <Stack.Screen
+            name="MyFiles"
+            component={MyFiles}
+            options={{
+              headerTitle: 'My Files',
               headerStyle: MainStyles.NavigationHeader,
               headerTitleStyle: MainStyles.NavigationHeaderTitle,
             }}

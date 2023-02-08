@@ -24,9 +24,9 @@ const doFetch = async (url, options) => {
   return json;
 };
 
-const useMedia = (showAllMedia = false) => {
+const useMedia = (showAllMedia = false, myFilesOnly = false) => {
   const [mediaArray, setMediaArray] = useState([]);
-  const {update} = useContext(MainContext);
+  const {update, user} = useContext(MainContext);
   const {getFilesByTag, postTag} = useTag();
 
   const loadMedia = async () => {
@@ -34,6 +34,7 @@ const useMedia = (showAllMedia = false) => {
     try {
       let json;
 
+      // Optionally show all the recent files in the server
       if (showAllMedia) {
         const response = await fetch(mediaUrl);
         json = await response.json();
@@ -41,6 +42,16 @@ const useMedia = (showAllMedia = false) => {
         json = await getFilesByTag(appTag);
         json = json.reverse();
       }
+
+      // Filter only to user's files if specified
+      if (myFilesOnly) {
+        json = json.filter((file) => {
+          if (file.user_id === user.user_id) {
+            return file;
+          }
+        });
+      }
+
       //  Get the extra data including the thumbnails of every file got from the server.
       const media = await Promise.all(
         json.map(async (file) => {

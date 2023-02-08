@@ -4,8 +4,8 @@ import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 import {ListStyles} from './Styles';
 
-const List = ({navigation, showAllMedia}) => {
-  const {mediaArray} = useMedia(showAllMedia);
+const List = ({navigation, showAllMedia, myFilesOnly}) => {
+  const {mediaArray} = useMedia(showAllMedia, myFilesOnly);
   return (
     <FlatList
       data={mediaArray}
@@ -22,6 +22,7 @@ const List = ({navigation, showAllMedia}) => {
 List.propTypes = {
   navigation: PropTypes.object,
   showAllMedia: PropTypes.bool,
+  myFilesOnly: PropTypes.bool,
 };
 
 export default List;

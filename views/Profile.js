@@ -12,8 +12,9 @@ import {NativeElementsStyles} from '../components/Styles';
 import {MainContext} from '../contexts/MainContext';
 import {useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
+import PropTypes from 'prop-types';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const {getFilesByTag} = useTag();
   const {setIsLoggedIn, user, setUser} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
@@ -69,6 +70,13 @@ const Profile = () => {
             }
           }}
         />
+        <CardDivider />
+        <Button
+          title="My Files"
+          onPress={() => {
+            navigation.navigate('MyFiles');
+          }}
+        />
       </Card>
       <Card>
         {editFormShown ? <ProfileEditForm /> : <></>}
@@ -81,6 +89,10 @@ const Profile = () => {
       </Card>
     </ScrollView>
   );
+};
+
+Profile.propTypes = {
+  navigation: PropTypes.object,
 };
 
 export default Profile;
