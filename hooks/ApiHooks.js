@@ -146,7 +146,7 @@ const useMedia = (showAllMedia = false, myFilesOnly = false) => {
 const useAuthentication = () => {
   const postLogin = async (userCredentials) => {
     const options = {
-      method: 'post',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },

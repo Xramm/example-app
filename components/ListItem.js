@@ -8,10 +8,12 @@ import {CardImage} from '@rneui/base/dist/Card/Card.Image';
 import {CardTitle} from '@rneui/base/dist/Card/Card.Title';
 import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
-import {AsyncStorage} from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useMedia} from '../hooks/ApiHooks';
 
 const ListItem = (props) => {
-  const {user} = useContext(MainContext);
+  const {user, update, setUpdate} = useContext(MainContext);
+  const {deleteMedia} = useMedia();
 
   const item = props.singleMedia;
   const navigation = props.navigation;
@@ -25,6 +27,7 @@ const ListItem = (props) => {
           onPress: async () => {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteMedia(item.file_id, token);
+            response && setUpdate(!update);
           },
         },
       ]);
@@ -56,7 +59,7 @@ const ListItem = (props) => {
               if (index === 0) {
                 console.log('Modify Pressed');
               } else {
-                console.log('Delete Pressed');
+                doDelete();
               }
             }}
           />
