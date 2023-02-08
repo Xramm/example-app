@@ -57,7 +57,7 @@ const ListItem = (props) => {
             buttons={['Modify', 'Delete']}
             onPress={(index) => {
               if (index === 0) {
-                console.log('Modify Pressed');
+                navigator.navigate('Modify', {file: item});
               } else {
                 doDelete();
               }

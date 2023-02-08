@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Image} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
@@ -10,6 +10,8 @@ import {Video} from 'expo-av';
 import {useFavourite, useUser} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {secondaryColor} from '../components/ColorPalette';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import {MainContext} from '../contexts/MainContext';
 
 const Single = ({route}) => {
   console.log(route.params);
@@ -19,18 +21,19 @@ const Single = ({route}) => {
     filename,
     time_added: t,
     media_type: type,
-    screenshot,
     user_id: userId,
     file_id: fileId,
   } = route.params;
 
+  const {user} = useContext(MainContext);
   const [owner, setOwner] = useState({});
   const [likes, setLikes] = useState([]);
   const [userLikesIt, setUserLikesIt] = useState(false);
 
   const video = useRef(null);
   const {getUserById} = useUser();
-  const {getFavouritesByFileId, postFavourite, deleteFavourite} = useFavourite();
+  const {getFavouritesByFileId, postFavourite, deleteFavourite} =
+    useFavourite();
 
   const getOwner = async () => {
     try {
@@ -46,6 +49,12 @@ const Single = ({route}) => {
       const likes = await getFavouritesByFileId(fileId);
       console.log('Likes: ' + likes);
       setLikes(likes);
+      for (const like of likes) {
+        if (like.user_id === user.user_id) {
+          setUserLikesIt(true);
+          break;
+        }
+      }
     } catch (error) {
       console.error('Single, getLikes: ', error);
     }
@@ -75,10 +84,41 @@ const Single = ({route}) => {
     }
   };
 
+  const unlock = async () => {
+    try {
+      await ScreenOrientation.unlockAsync();
+    } catch (error) {
+      console.error('Single, unlock: ' + error);
+    }
+  };
+
+  const lock = async () => {
+    try {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    } catch (error) {
+      console.error('Single, unlock: ' + error);
+    }
+  };
+
   useEffect(() => {
     getOwner();
     getLikes();
+    unlock();
+
+    return () => {
+      lock();
+    };
   }, []);
+
+  const showVideoInFullscreen = async () => {
+    try {
+      if (video) await video.presentFullscreenPlayer();
+    } catch (error) {
+      console.error('Single, showVideoInFullscreen: ' + error);
+    }
+  };
 
   return (
     <Card>
@@ -99,8 +139,6 @@ const Single = ({route}) => {
           useNativeControls
           resizeMode="contain"
           isLooping
-          usePoster
-          posterSource={{uri: uploadsUrl + screenshot}}
           onError={(error) => {
             console.log('Single, Single: ' + error);
           }}
